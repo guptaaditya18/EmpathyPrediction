@@ -115,7 +115,7 @@ accuracy with K Nearest Neighbors: 69.3069306930693 %
 ```
 Train.rf(15)
 ```
-​
+![rf](https://user-images.githubusercontent.com/13432475/49681740-61dbb200-fa6c-11e8-919a-3877b8c53358.png)
 best max depth : 10
 Random Forest model trained
 
