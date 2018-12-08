@@ -113,7 +113,11 @@ Test.test("K Nearest Neighbors")
 ```
 accuracy with K Nearest Neighbors: 69.3069306930693 %
 
-Train.knn() :
+Train.knn(n) :
+
+parameter - itertare K from 1 to n to find best K based on validation accuracy
+
+function:
 
 ```python
 def knn(k):
@@ -164,7 +168,11 @@ Test.test("Random Forest")
 ```
 accuracy with Random Forest: 69.3069306930693 %
 
-Train.rf():
+Train.rf(n):
+
+parameter - itertare max_depth from 1 to n to find best max_depth based on validation accuracy
+
+function:
 ```python
 def rf(iter):
 	dfXtr = pd.read_pickle("./Data/dfXtr.pkl")
@@ -212,6 +220,48 @@ Test.test("Logistic Regression")
 ```
 accuracy with Logistic Regression: 64.35643564356435 %
 
+Train.lr(n) - 
+parameter - itertare C from 1 to n to find best C based on validation accuracy
+
+function:
+```python
+def lr(iter):
+	dfXtr = pd.read_pickle("./Data/dfXtr.pkl")
+	dfYtr = pd.read_pickle("./Data/dfYtr.pkl")
+	dfXva = pd.read_pickle("./Data/dfXva.pkl")
+	dfYva = pd.read_pickle("./Data/dfYva.pkl")
+
+	cIter = iter
+	x   = np.zeros((cIter,2), dtype=float)
+
+
+	for i in range(1, cIter+1):
+    		logReg = LogisticRegression(C = i, random_state = random.seed(1234))
+    		logReg.fit(dfXtr, dfYtr)
+    		x[i-1][0] = logReg.score(dfXtr, dfYtr)
+    		x[i-1][1] = logReg.score(dfXva, dfYva)
+
+	y = [i for i in range(1, cIter+1)]
+	print(x)
+
+	plt.plot(y, x[:,0], label = 'Test Accuracy', linewidth=2.0)
+	plt.plot(y, x[:,1], label = 'Validation Accuracy', linewidth=2.0)
+	plt.xlabel('C')
+	plt.ylabel('Accuracy (%)')
+	plt.title('Logistic Regression')
+	plt.legend()
+	plt.grid()
+	plt.show
+
+	maxC = np.argmax(x[:,1]) + 1
+	print(maxC)
+	FinallogReg = LogisticRegression(C = maxC, random_state = random.seed(1234))  
+	FinallogReg.fit(dfXtr, dfYtr)
+	joblib.dump(FinallogReg, "./Models/lr.model")
+	print("Logistic Regression model trained")
+```
+
+
 
 #Perceptron
 ```
@@ -224,6 +274,49 @@ Perceptron model trained
 ```python
 Test.test("Perceptron")
 accuracy with Perceptron: 71.28712871287128 %
+```
+accuracy with Perceptron: 71.28712871287128 %
+Train.perc(n) - 
+parameter - itertare epochs from 1 to n to find best number of epochs based on validation accuracy
+
+function:
+
+```python
+def perc(iter):
+	dfXtr = pd.read_pickle("./Data/dfXtr.pkl")
+	dfYtr = pd.read_pickle("./Data/dfYtr.pkl")
+	dfXva = pd.read_pickle("./Data/dfXva.pkl")
+	dfYva = pd.read_pickle("./Data/dfYva.pkl")
+
+	depthiter = iter
+	size = depthiter//5
+	
+	x   = np.zeros((size, 2), dtype=float)
+
+	for i in range(5, depthiter+1, 5):
+    		PercModel = Perceptron(max_iter=100, random_state = random.seed(1234))
+    		PercModel.fit(dfXtr, dfYtr)
+    		x[(i//5) - 1][0] = PercModel.score(dfXtr, dfYtr)
+    		x[(i//5) - 1][1] = PercModel.score(dfXva, dfYva)
+
+	y = [i for i in range(5, depthiter+1, 5)]
+	print(x)
+
+	plt.plot(y, x[:,0], label = 'Test Accuracy', linewidth=2.0)
+	plt.plot(y, x[:,1], label = 'Validation Accuracy', linewidth=2.0)
+	plt.xlabel('Epochs')
+	plt.ylabel('Accuracy (%)')
+	plt.title('Perceptron')
+	plt.legend()
+	plt.grid()
+	plt.show
+
+	maxiter = (np.argmax(x[:,1]) + 1)*5
+	print(maxiter)
+	FinalPercModel = Perceptron(max_iter=maxiter, random_state = random.seed(1234))
+	FinalPercModel.fit(dfXtr, dfYtr)
+	joblib.dump(FinalPercModel, "./Models/perc.model")
+	print("Perceptron model trained")
 ```
 
 # Support Vector Machine
@@ -239,3 +332,102 @@ SVM model trained
 Test.test("Support Vector Machine")
 ```
 accuracy with Support Vector Machine: 71.28712871287128 %
+
+Train.svm(n) - 
+parameter - itertare c from 1 to n to find best C based on validation accuracy
+
+function:
+
+```python
+def sv(c):
+	dfXtr = pd.read_pickle("./Data/dfXtr.pkl")
+	dfYtr = pd.read_pickle("./Data/dfYtr.pkl")
+	dfXva = pd.read_pickle("./Data/dfXva.pkl")
+	dfYva = pd.read_pickle("./Data/dfYva.pkl")
+
+
+
+	citer = c
+	x   = np.zeros((citer,2), dtype=float)
+
+	for i in range(1, citer+1):
+    		svmModel = svm.SVC(gamma = 0.001, C = i, kernel = 'rbf', random_state = random.seed(1234))
+    		svmModel.fit(dfXtr, dfYtr)
+    		x[i-1][0] = svmModel.score(dfXtr, dfYtr)
+    		x[i-1][1] = svmModel.score(dfXva, dfYva)
+
+	y = [i for i in range(1, citer+1)]
+	print(x)
+
+	plt.plot(y, x[:,0], label = 'Test Accuracy', linewidth=2.0)
+	plt.plot(y, x[:,1], label = 'Validation Accuracy', linewidth=2.0)
+	plt.xlabel('C')
+	plt.ylabel('Accuracy (%)')
+	plt.title('Support Vector Machine')
+	plt.legend()
+	plt.grid()
+	plt.show
+
+	bestC = np.argmax(x[:,1]) + 1
+	print(bestC)
+	FinalsvmModel = svm.SVC(gamma = 0.001, C = bestC, kernel = 'rbf', random_state = random.seed(1234))  
+	FinalsvmModel.fit(dfXtr, dfYtr)
+	joblib.dump(FinalsvmModel, "./Models/svm.model")
+	print("SVM model trained")
+```
+
+
+# Testing
+
+Test(modelName)-
+parameter - name of model {"Random Classifier","Most Frequent","Random Forest","Logistic Regression","Support Vector Machine","K Nearest Neighbors"}
+
+function:
+
+```python
+from sklearn.externals import joblib
+from Train import *
+import numpy as np
+import random
+
+def test(model):
+
+	X = pd.read_pickle("./Data/dfXte.pkl")
+	Y = pd.read_pickle("./Data/dfYte.pkl")
+
+
+	if(model == "Random Classifier"):
+		randList = []
+		for x in range(Y.size):
+			randList.append(random.randint(0,1))
+		print("accuracy with {}: {} %".format(model, 100 * (np.mean((Y == randList)))))
+		return None
+
+	elif(model == "Most Frequent"):
+		mostFrequentClass = mf()
+		print("accuracy with {}: {} %".format(model, 100 * (np.mean((Y > 0) == mostFrequentClass))))
+		return None
+
+	elif(model == "Random Forest"):
+		filename = "rf.model"
+	elif(model == "Logistic Regression"):
+		filename = "lr.model"
+	elif(model == "Perceptron"):
+		filename = "perc.model"
+	elif(model == "Support Vector Machine"):
+		filename = "svm.model"
+	elif(model == "K Nearest Neighbors"):
+		filename = "knn.model"
+	else:
+		print("Invalid argument, try again")
+		return None
+
+	file = "./Models/" + filename
+	LoadedModel = joblib.load(file)
+
+
+
+	score = LoadedModel.score(X, Y)  
+	print("accuracy with {}: {} %".format(model, 100 * score)) 
+```
+
