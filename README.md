@@ -154,6 +154,7 @@ accuracy with Perceptron: 71.28712871287128 %
 ```
 Train.sv(10)
 ```
+![rf](https://user-images.githubusercontent.com/13432475/49681740-61dbb200-fa6c-11e8-919a-3877b8c53358.png)
 Best C : 5
 
 SVM model trained
