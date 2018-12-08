@@ -50,7 +50,7 @@ def LoadCsv(filename):
 
 ```
 
-Feature elimination with Correlation
+## Feature elimination with Correlation
 Correlated features: This set uses 36 features which were highly correlated to the target feature ‘Empathy’.
 
 ```python
