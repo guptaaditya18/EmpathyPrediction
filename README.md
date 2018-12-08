@@ -168,7 +168,7 @@ Random Forest model trained
 ```
 Test.test("Random Forest")
 ```
-accuracy with Random Forest: 69.3069306930693 %
+accuracy with Random Forest: 74.25742574257426 %
 
 Train.rf(n):
 
@@ -275,7 +275,6 @@ Perceptron model trained
 
 ```python
 Test.test("Perceptron")
-accuracy with Perceptron: 71.28712871287128 %
 ```
 accuracy with Perceptron: 71.28712871287128 %
 Train.perc(n) - 
