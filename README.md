@@ -55,11 +55,16 @@ def LoadCsv(filename):
 importlib.reload(PreProc)
 PreProc.compSet()
 ```
+
+Feature elimination with Correlation
+Correlated features: This set uses 36 features which were highly correlated to the target feature ‘Empathy’.
+
+```
+importlib.reload(PreProc)
+PreProc.corrSet()
+```
 ```python
 def corrSet():
-
-	dfX = pd.read_pickle("./Data/dfX.pkl")
-	dfY = pd.read_pickle("./Data/dfY.pkl")
 
 	#finding correlation of 'Empathy' variable with other variables
 	correlation = dfX.corrwith(dfY, axis=0, drop=False)
@@ -73,13 +78,6 @@ def corrSet():
 	dfX2.to_pickle("./Data/dfX2.pkl")
 
 	XYSplit("corr")
-```
-Feature elimination with Correlation
-Correlated features: This set uses 36 features which were highly correlated to the target feature ‘Empathy’.
-
-```
-importlib.reload(PreProc)
-PreProc.corrSet()
 ```
 
 # Baseline Accuracy
@@ -101,29 +99,17 @@ accuracy with Most Frequent: 67.32673267326733 %
 Train.knn(10)
 Test.test("K Nearest Neighbors")
 ```
-​
-[[100.          62.22222222]<br>
- [ 82.43243243  56.66666667]<br>
- [ 81.44963145  70.        ]<br>
- [ 77.02702703  63.33333333]<br>
- [ 76.65847666  75.55555556]<br>
- [ 73.46437346  72.22222222]<br>
- [ 75.55282555  71.11111111]<br>
- [ 73.83292383  71.11111111]<br>
- [ 73.83292383  70.        ]<br>
- [ 72.85012285  66.66666667]]<br>
-5
-![knn](https://user-images.githubusercontent.com/13432475/49681479-f98ad180-fa67-11e8-9fae-d81c5390de6b.png)
 
+![knn](https://user-images.githubusercontent.com/13432475/49681479-f98ad180-fa67-11e8-9fae-d81c5390de6b.png)
+Best K : 5
 KNN model trained
 
 
-accuracy with K Nearest Neighbors: 69.3069306930693 %
-
 ```
 Test.test("K Nearest Neighbors")
-accuracy with K Nearest Neighbors: 69.3069306930693 %
 ```
+accuracy with K Nearest Neighbors: 69.3069306930693 %
+
 
 # Random Forest
 ```
