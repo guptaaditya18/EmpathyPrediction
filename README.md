@@ -8,7 +8,7 @@
 dfY - contains the target variable-Empathy<br>
 dfX - contains all the variables
 6. Splitting X and Y into training and testing set
-```
+```python
 import Train, Test, PreProc, importlib
 importlib.reload(PreProc)
 PreProc.LoadCsv('youngpeoplesurvey/responses.csv')
@@ -51,7 +51,7 @@ def LoadCsv(filename):
 ```
 
 
-```
+```python
 importlib.reload(PreProc)
 PreProc.compSet()
 ```
@@ -59,7 +59,7 @@ PreProc.compSet()
 Feature elimination with Correlation
 Correlated features: This set uses 36 features which were highly correlated to the target feature ‘Empathy’.
 
-```
+```python
 importlib.reload(PreProc)
 PreProc.corrSet()
 ```
