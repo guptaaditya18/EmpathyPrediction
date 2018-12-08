@@ -1,5 +1,5 @@
 ## Pre-processing of data
-
+Pre-proceesing involved the following steps:
 1. coverting .csv data to a dataframe
 2. Target feature is 'Empathy'. Converting empathy values 1,2,3 to 0 (not very empathetic) and 4,5 to 1 (very empathetic).
 3. Removing rows in which value of Empathy is NaN
@@ -9,10 +9,10 @@ dfY - contains the target variable-Empathy<br>
 dfX - contains all the variables
 6. Splitting X and Y into training and testing set
 ```python
-import Train, Test, PreProc, importlib
-importlib.reload(PreProc)
+import Train, Test, PreProc
 PreProc.LoadCsv('youngpeoplesurvey/responses.csv')
 ```
+LoadCSV function -
 ```python
 def LoadCsv(filename):
 
@@ -50,12 +50,6 @@ def LoadCsv(filename):
 
 ```
 
-
-```python
-importlib.reload(PreProc)
-PreProc.compSet()
-```
-
 Feature elimination with Correlation
 Correlated features: This set uses 36 features which were highly correlated to the target feature ‘Empathy’.
 
@@ -80,13 +74,22 @@ def corrSet():
 	XYSplit("corr")
 ```
 
+Using compSet function, user can switch back to complete set of features. To switch back to reduced features, user can use corrSet() function again:
+```python
+importlib.reload(PreProc)
+PreProc.compSet()
+```
+
 # Baseline Accuracy
 ## Random Classification
 ```
-Test.rc()
+Train.rc()
 Test.test("Random Classifier")
-accuracy with Random Classifier: 50.495049504950494 %
 ```
+
+accuracy with Random Classifier: 50.495049504950494 %
+
+
 ## Classify to most frequent
 ```
 Train.mf()
@@ -110,6 +113,43 @@ Test.test("K Nearest Neighbors")
 ```
 accuracy with K Nearest Neighbors: 69.3069306930693 %
 
+Train.knn() :
+
+```python
+def knn(k):
+	dfXtr = pd.read_pickle("./Data/dfXtr.pkl")
+	dfYtr = pd.read_pickle("./Data/dfYtr.pkl")
+	dfXva = pd.read_pickle("./Data/dfXva.pkl")
+	dfYva = pd.read_pickle("./Data/dfYva.pkl")
+	kiter = k
+	x   = np.zeros((kiter,2), dtype=float)
+
+	for i in range(1, kiter+1):
+    		knnModel = KNeighborsClassifier(n_neighbors = i)
+    		knnModel.fit(dfXtr, dfYtr)
+    		x[i-1][0] = knnModel.score(dfXtr, dfYtr)*100
+    		x[i-1][1] = knnModel.score(dfXva, dfYva)*100
+
+	y = [i for i in range(1, kiter+1)]
+	print(x)
+
+	plt.plot(y, x[:,0], label = 'Test Accuracy', linewidth=2.0)
+	plt.plot(y, x[:,1], label = 'Validation Accuracy', linewidth=2.0)
+	plt.xlabel('K')
+	plt.ylabel('Accuracy (%)')
+	plt.title('K Nearest Neighbors')
+	plt.legend()
+	plt.grid()
+	plt.show
+
+	bestk = np.argmax(x[:,1])+1
+	print(bestk)
+	FinalknnModel = KNeighborsClassifier(n_neighbors = bestk)  
+	FinalknnModel.fit(dfXtr, dfYtr)
+	joblib.dump(FinalknnModel, "./Models/knn.model")
+	print("KNN model trained")
+```
+
 
 # Random Forest
 ```
@@ -123,6 +163,42 @@ Random Forest model trained
 Test.test("Random Forest")
 ```
 accuracy with Random Forest: 69.3069306930693 %
+
+Train.rf():
+```python
+def rf(iter):
+	dfXtr = pd.read_pickle("./Data/dfXtr.pkl")
+	dfYtr = pd.read_pickle("./Data/dfYtr.pkl")
+	dfXva = pd.read_pickle("./Data/dfXva.pkl")
+	dfYva = pd.read_pickle("./Data/dfYva.pkl")
+	depthiter = iter
+	x   = np.zeros((depthiter,2), dtype=float)
+
+	for i in range(1, depthiter+1):
+    		RFModel = RandomForestClassifier(max_depth = i, random_state = random.seed(1234), n_estimators = 100)
+    		RFModel.fit(dfXtr, dfYtr)
+    		x[i-1][0] = RFModel.score(dfXtr, dfYtr)
+    		x[i-1][1] = RFModel.score(dfXva, dfYva)
+
+	y = [i for i in range(1, depthiter +1)]
+	print(x)
+
+	plt.plot(y, x[:,0], label = 'Test Accuracy', linewidth=2.0)
+	plt.plot(y, x[:,1], label = 'Validation Accuracy', linewidth=2.0)
+	plt.xlabel('Max depth')
+	plt.ylabel('Accuracy (%)')
+	plt.title('Random Forest')
+	plt.legend()
+	plt.grid()
+	plt.show
+
+	maxdepth = np.argmax(x[:,1]) + 1
+	print(maxdepth)
+	FinalRFModel = RandomForestClassifier(max_depth = maxdepth, random_state = random.seed(1234), n_estimators = 100)  
+	FinalRFModel.fit(dfXtr, dfYtr)
+	joblib.dump(FinalRFModel, "./Models/rf.model")
+	print("Random Forest model trained")
+```
 
 # Logistic Regression
 
