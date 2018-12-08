@@ -127,7 +127,7 @@ accuracy with Random Forest: 69.3069306930693 %
 # Logistic Regression
 
 Train.lr(10)
-
+![lr](https://user-images.githubusercontent.com/13432475/49681713-08738300-fa6c-11e8-8d17-d2cad61de45f.png)
 Best C : 1
 Logistic Regression model trained
 
