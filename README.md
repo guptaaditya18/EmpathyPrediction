@@ -141,7 +141,7 @@ accuracy with Logistic Regression: 64.35643564356435 %
 ```
 Train.perc(100)
 ```
-
+![perc](https://user-images.githubusercontent.com/13432475/49681733-4670a700-fa6c-11e8-9f0c-6626c567f6b9.png)
 Best number of epochs: 95
 Perceptron model trained
 
